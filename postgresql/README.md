@@ -1,6 +1,5 @@
-# Introduction to PostgreSQL
+bb# Introduction to PostgreSQL
 
-This is part 1 of my series on learning PostgreSQL. <br/>
 The primary focus is getting PostgreSQL up and running and </br>
 taking a first look at the database. </br>
 
@@ -15,8 +14,6 @@ PostgreSQL [Docker Image](https://hub.docker.com/_/postgres)
 ## Run a simple PostgreSQL database (compose)
 
 ```
-cd storage/databases/postgresql/1-introduction
-
 docker compose up
 ```
 
@@ -38,7 +35,7 @@ Also take note we are running a specific version of PostgreSQL now:
 docker run -it --rm --name postgres `
   -e POSTGRES_PASSWORD=admin123 `
   -v ${PWD}/pgdata:/var/lib/postgresql/data `
-  postgres:15.0
+  postgres:16.3
 ```
 
 We can enter the container to connect to SQL:
@@ -86,7 +83,7 @@ docker run -it --rm --name postgres `
   -e POSTGRES_PASSWORD=admin123 `
   -v ${PWD}/pgdata:/var/lib/postgresql/data `
   -p 5000:5432 `
-  postgres:15.0
+  postgres:16.3
 ```
 Note that this does not change the port which PostgreSQL runs on. </br>
 To change that, we need to explore the configuration.
@@ -108,7 +105,7 @@ We need to update the docker image, the port we want to expose outside of the co
 version: '3.1'
 services:
   db:
-    image: postgres:15.0
+    image: postgres:16.3
     restart: always
     environment:
       POSTGRES_PASSWORD: admin123
@@ -123,7 +120,16 @@ services:
       - 8080:8080
 ```
 
-That's it for chapter one! </br>
-In [chapter 2](../2-configuration/README.md), we will take a look at Configuration and how to start our PostgreSQL instance with a custom configuration file. </br>
-We will also explore the customization options available. </br>
+## Update the docker-compose.yaml file 
+
+Here we need to update the file to contain yet another service that will handle the aquisition + data processing. </br>
+
+We need to create a new volume mapping for the kaggle.json file as well. </br>
+
+First connect to your kaggle account (or create one if you don't have it and download the kaggle.json file --> Profile -> Settings -> API -> Create New Token). </br>
+
+After you have downloaded the file open a powershell prompt in the folder where the `kaggle.json` file has been saved and execute the following command: </br>
+`mv kaggle.json $ENV:USERPROFILE\.kaggle\`
+
+
 
